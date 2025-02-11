@@ -3,6 +3,8 @@ import {
   getStatusTransactionService,
 } from "../services/transaction_service.js";
 
+let client = new Set();
+
 // create transaction
 const createTransactionController = async (req, res) => {
   try {
@@ -31,9 +33,12 @@ const getStatusTransactionController = async (req, res) => {
 // midtrans callback
 const getMidtransCallbackController = async (req, res) => {
   console.log("Midtrans Webhook:", req.body);
-  res.status(200).json({ message: req.body });
+  const message = JSON.stringify(req.body);
+  client.forEach((client) => client.send(message));
+  res.status(200).send("OK");
 };
 
 export { createTransactionController };
 export { getMidtransCallbackController };
 export { getStatusTransactionController };
+export { client };
