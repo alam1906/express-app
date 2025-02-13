@@ -8,7 +8,8 @@ let client = new Set();
 // create transaction
 const createTransactionController = async (req, res) => {
   try {
-    const data = await createTransactionService(req.body);
+    const {order_id, items} = req.body;
+    const data = await createTransactionService(order_id, items);
     res.json({ success: true, data });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

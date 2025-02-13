@@ -14,12 +14,19 @@ const coreApi = new Midtrans.CoreApi({
 });
 
 // create transaction
-const createTransactionService = async (order) => {
+const createTransactionService = async (order_id, items) => {
+  const totalAmount = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const parameter = {
     transaction_details: {
-      order_id: order.id,
-      gross_amount: order.amount,
+      order_id: order_id,
+      gross_amount: totalAmount,
     },
+    item_details: items.map(item =>({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      quantity: item.quantity,
+    }))
   };
 
   const response = await snap.createTransaction(parameter);
